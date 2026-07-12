@@ -1,8 +1,8 @@
-# 🛡️ Bastion: Enterprise Native Network Assessment & Interdiction Engine
+# Bastion: System Network Assessment & Interdiction Engine
 
 Welcome to the **Bastion** documentation and architecture showcase repository. This repository serves as the public-facing architectural blueprint, topology mapping, and operational reference for the closed-source `bastion` project.
 
-Bastion is a highly modular, enterprise-grade native compiled system network assessment and defense engine. It features zero-allocation binary parsing, asynchronous raw socket sniffing, and lock-free kernel-level packet filter hooks.
+Bastion is a highly modular, enterprise-grade native compiled systems compiler network assessment and defense engine. It features zero-allocation binary parsing, asynchronous raw socket sniffing, and lock-free kernel-level packet filter hooks.
 
 ---
 
@@ -26,7 +26,7 @@ flowchart TB
 
     subgraph Kernel & Hardware Plane
         D -->|Packet Forge| H[Raw Socket Packet Injector]
-        D -->|Sniff/Analyze| I[eBPF / XDP Socket Filter]
+        D -->|Sniff/Analyze| I[Kernel-Level Socket Filter]
         H --> J[Physical Interface Layer]
         I --> J
     end
@@ -42,35 +42,35 @@ flowchart TB
 
 ## 🧩 Workspace Crate Architecture
 
-Bastion strictly adheres to Separation of Concerns via modular Rust workspaces:
+Bastion strictly adheres to Separation of Concerns via modular workspaces:
 
-* **`daemon`**: The high-throughput background coordinator. Exposes local Unix Domain Sockets (UDS) and establishes dynamic secure WebSocket coordinate links to the signaling mesh. It manages active sub-processes asynchronously using a thread-safe coordinator, allowing instantaneous process aborts.
+* **`daemon`**: The high-throughput background coordinator. Exposes local Unix Domain Sockets (UDS) and establishes dynamic secure coordinate links to the signaling mesh. It manages active sub-processes asynchronously using a thread-safe coordinator, allowing instantaneous process aborts.
 * **`cli`**: The command-line control utility. Communicates with the background daemon over UDS to trigger operations and query subsystem status (`ping`, `status`, `block`, `unblock`).
 * **`utils`**: The utility library containing CIDR engines, network-card self-awareness checks, and the high-speed port mapping engine (`scan`).
 * **`forge`**: A zero-copy TCP/UDP raw packet factory with O(1) buffer allocation.
 * **`recon`**: Active/passive service fingerprinting and passive wire-sniffing. Ingests TTL and Hop Limit metrics off the wire for zero-probe OS classification.
 * **`strike`**: Active wireless interdiction and Deauth injection for supported radio adapters.
-* **`ebpf` & `xdp`**: The raw kernel-level packet hook and BPF maps layer, allowing high-performance traffic block and unblock controls directly in the network card driver path.
-* **`ffi`**: The stable C-compatible native interface (`libbastion_ffi.so`), allowing foreign runtime integrations.
+* **`ebpf` & `xdp`**: The raw kernel-level packet hook and shared maps layer, allowing high-performance traffic block and unblock controls directly in the network card driver path.
+* **`ffi`**: The stable compatible native interface (`libbastion_ffi.so`), allowing foreign runtime integrations.
 
 ---
 
 ## 🛡️ Core Capabilities
 
 ### 1. Zero-Probe Passive OS Fingerprinting
-By monitoring network interfaces passively, Bastion intercepts TCP syn-acks, matching IPv4 TTLs, window sizes, and IPv6 Hop Limits against known operating system signature profiles. This allows it to classify network hosts without sending a single active probe.
+By monitoring network interfaces passively, Bastion intercepts TCP syn-acks, matching IPv4 TTLs, window sizes, and IPv6 Hop Limits against operating system signature profiles. This allows it to classify network hosts without sending a single active probe.
 
-### 2. Lock-Free Packet Mitigation (eBPF/XDP)
-Utilizes eBPF bytecode loaded directly into the kernel network hook points. When the operator issues a block/unblock policy, the system updates a shared lock-free BPF map, allowing packet drop evaluations to complete in nanoseconds at the driver level.
+### 2. Lock-Free Packet Mitigation (Kernel-Level Hooks)
+Utilizes kernel-level instruction bytecode loaded directly into the network hook points. When the operator issues a block/unblock policy, the system updates a shared lock-free map, allowing packet drop evaluations to complete in nanoseconds at the driver level.
 
-### 3. Non-Blocking WebSockets Orchestration
+### 3. Non-Blocking Bidirectional Orchestration
 The daemon maintains a persistent coordinate connection with the central dashboard, streaming structured CSV and JSON outputs in real-time. Command execution is delegated to spawned asynchronous readers, preventing the coordination connection from blocking during active sweeps.
 
 ---
 
 ## 🖥️ Expected CLI Outputs & Telemetry
 
-Below are real-world expected stdout results collected during tactical operations on a local `/24` subnet testing against actual target hosts (e.g., standard Fios router gateway `192.168.1.1` and Debian-based laptops `192.168.1.160`):
+Below are real-world expected stdout results collected during tactical operations on a local `/24` subnet testing against actual target hosts (e.g., standard Fios router gateway `192.168.1.1` and Linux-based laptops `192.168.1.160`):
 
 ### 1. Layer 2 Discovery Sweep (`discover`)
 Performs high-speed active/passive ARP and NDP subnet mapping. When `--stdout` is supplied, it streams a raw summary of findings:
@@ -116,7 +116,7 @@ $ scan 192.168.1.160 22,80,443,30778
 ============================================================
  🔥 TACTICAL SCAN RESULTS FOR 192.168.1.160
 ============================================================
- [+] PORT 30778 : OPEN ... [ SSH-2.0-OpenSSH_9.2p1 Debian-2+deb12u10 ]
+ [+] PORT 30778 : OPEN ... [ SSH-2.0-OpenSSH_9.2p1 Linux-2+deb12u10 ]
 ============================================================
 ```
 
