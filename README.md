@@ -13,20 +13,20 @@ Bastion is built as a capability-first background daemon paired with CLI control
 ```mermaid
 flowchart TB
     subgraph User Interface Plane
-        A[Dashboard Controller] -- WebSockets / Signaling -- > B[RMediaTech Portal]
-        C[CLI Utility Plane] -- Unix Domain Sockets UDS --> D[Bastion Daemon]
+        A[Dashboard Controller] -->|WebSockets / Signaling| B[RMediaTech Portal]
+        C[CLI Utility Plane] -->|Unix Domain Sockets UDS| D[Bastion Daemon]
     end
 
     subgraph Process Plane
-        B -- Coordination Bridge --> D
-        D -- Asynchronous Process Spawn --> E[High-Speed Scanner 'scan']
-        D -- Asynchronous Process Spawn --> F[UDP Scout Engine 'udp']
-        D -- Asynchronous Process Spawn --> G[Layer 2 Subnet Sweep 'discover']
+        B -->|Coordination Bridge| D
+        D -->|Asynchronous Process Spawn| E[High-Speed Scanner 'scan']
+        D -->|Asynchronous Process Spawn| F[UDP Scout Engine 'udp']
+        D -->|Asynchronous Process Spawn| G[Layer 2 Subnet Sweep 'discover']
     end
 
     subgraph Kernel & Hardware Plane
-        D -- Packet Forge --> H[Raw Socket Packet Injector]
-        D -- Sniff/Analyze --> I[eBPF / XDP Socket Filter]
+        D -->|Packet Forge| H[Raw Socket Packet Injector]
+        D -->|Sniff/Analyze| I[eBPF / XDP Socket Filter]
         H --> J[Physical Interface Layer]
         I --> J
     end
