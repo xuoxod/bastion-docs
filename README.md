@@ -91,15 +91,14 @@ $ discover wlp0s20f3 --stdout --cidr 192.168.1.0/24
 [*] Broadcasting active SSDP & mDNS multicast discovery queries...
 [*] Raw packet drainage complete. Yielding for returns (3s)...
 
-[+] Network convergence captured. Found 15 active hosts.
-[+] Aggregated down to 15 distinct Layer 2 endpoints.
+[+] Network convergence captured. Found 14 active hosts.
+[+] Aggregated down to 14 distinct Layer 2 endpoints.
 
 --- CSV REPORT ---
 IP,MAC,Hostname
 192.168.1.1,78:67:0E:BA:7E:74,_gateway
 192.168.1.159,64:4E:D7:3B:72:5A,HP3B725A
 192.168.1.160,04:EA:56:9D:4F:CC,xuaux
-192.168.1.182,0C:70:43:B3:47:54,PS5-3BE97E.local
 192.168.1.185,84:C8:A0:6D:A8:88,50Q550G
 [+] Target sequence completed.
 ```
