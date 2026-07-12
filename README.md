@@ -21,7 +21,7 @@ flowchart TB
         B -- Coordination Bridge --> D
         D -- Asynchronous Process Spawn --> E[High-Speed Scanner 'scan']
         D -- Asynchronous Process Spawn --> F[UDP Scout Engine 'udp']
-        D -- Asynchronous Process Spawn --> G[BLE Sweep Engine 'ble_scan']
+        D -- Asynchronous Process Spawn --> G[Layer 2 Subnet Sweep 'discover']
     end
 
     subgraph Kernel & Hardware Plane
@@ -65,6 +65,96 @@ Utilizes eBPF bytecode loaded directly into the kernel network hook points. When
 
 ### 3. Non-Blocking WebSockets Orchestration
 The daemon maintains a persistent coordinate connection with the central dashboard, streaming structured CSV and JSON outputs in real-time. Command execution is delegated to spawned asynchronous readers, preventing the coordination connection from blocking during active sweeps.
+
+---
+
+## 🖥️ Expected CLI Outputs & Telemetry
+
+Below are real-world expected stdout results collected during tactical operations on a local `/24` subnet testing against actual target hosts (e.g., standard Fios router gateway `192.168.1.1` and Debian-based laptops `192.168.1.160`):
+
+### 1. Layer 2 Discovery Sweep (`discover`)
+Performs high-speed active/passive ARP and NDP subnet mapping. When `--stdout` is supplied, it streams a raw summary of findings:
+
+```bash
+$ discover wlp0s20f3 --stdout --cidr 192.168.1.0/24
+```
+
+```text
+[*] Initializing Fast L2 Discovery on interface: wlp0s20f3
+  -> Source MAC: 58:CE:2A:3E:42:7F
+  -> Source IPv4: 192.168.1.57
+  -> Sweeping subnet: 192.168.1.0/24
+  -> Source IPv6: 2600:4040:7cdc:1a00:59d4:c7d8:a36b:c686
+
+[!] Draining Subnet Matrix (254 ARP / 254 NDP)...
+[*] Broadcasting IPv6 ff02::1 Multicast Echo Request...
+[*] Broadcasting active SSDP & mDNS multicast discovery queries...
+[*] Raw packet drainage complete. Yielding for returns (3s)...
+
+[+] Network convergence captured. Found 15 active hosts.
+[+] Aggregated down to 15 distinct Layer 2 endpoints.
+
+--- CSV REPORT ---
+IP,MAC,Hostname
+192.168.1.1,78:67:0E:BA:7E:74,_gateway
+192.168.1.159,64:4E:D7:3B:72:5A,HP3B725A
+192.168.1.160,04:EA:56:9D:4F:CC,xuaux
+192.168.1.182,0C:70:43:B3:47:54,PS5-3BE97E.local
+192.168.1.185,84:C8:A0:6D:A8:88,50Q550G
+[+] Target sequence completed.
+```
+
+### 2. TCP Stealth SYN & Banner Scan (`scan`)
+Scans host ports using raw half-open SYN packets (falling back to user-space Connect sockets when permissions aren't elevated) and initiates zero-allocation active fingerprinters on discovery:
+
+```bash
+# Scan custom target SSH port on local work laptop
+$ scan 192.168.1.160 22,80,443,30778
+```
+
+```text
+>> Engine initialized. Scanning 4 ports on 192.168.1.160 using Stealth SYN (auto-fallback) ...
+============================================================
+ 🔥 TACTICAL SCAN RESULTS FOR 192.168.1.160
+============================================================
+ [+] PORT 30778 : OPEN ... [ SSH-2.0-OpenSSH_9.2p1 Debian-2+deb12u10 ]
+============================================================
+```
+
+```bash
+# Scan default TCP services on the subnet gateway router
+$ scan 192.168.1.1 53,80,443
+```
+
+```text
+>> Engine initialized. Scanning 3 ports on 192.168.1.1 using Stealth SYN (auto-fallback) ...
+============================================================
+ 🔥 TACTICAL SCAN RESULTS FOR 192.168.1.1
+============================================================
+ [+] PORT 53    : OPEN ... [ DNS TCP Service ]
+ [+] PORT 80    : OPEN ... [ HTTP/1.0 301 Moved Permanently ]
+ [+] PORT 443   : OPEN ... [ Unknown (Raw: ) ]
+============================================================
+```
+
+### 3. UDP Active Protocol Scouting (`udp`)
+Verifies UDP listeners. Since UDP is connectionless, `--scout` actively fires NTP, SSDP, SNMP, and DNS signature payloads to verify response patterns:
+
+```bash
+$ udp 192.168.1.1 53,123,161,1900 --scout
+```
+
+```text
+[*] Initializing UDP Tactical Scout on 192.168.1.1...
+[*] Sending active protocol probes (DNS, NTP, SNMP, SSDP)...
+============================================================
+ 🔥 UDP SCOUT RESULTS FOR 192.168.1.1
+============================================================
+ [+] PORT 53    : OPEN       ... [ DNS Responder ]
+ [+] PORT 123   : OPEN       ... [ NTP Server Daemon ]
+ [+] PORT 1900  : FILTERED   ... [ SSDP UPnP Advertisements ]
+============================================================
+```
 
 ---
 
