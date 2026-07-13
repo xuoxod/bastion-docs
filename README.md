@@ -163,4 +163,15 @@ Documentation in this repository emphasizes operational outcomes, interfaces, an
 
 ---
 
+## 📂 Extended Documentation Guides
+For detailed engineering checklists, district integration protocols, and testing models, refer to:
+*   [📖 Airspace Sentinel Plan](AIRSPACE_SENTINEL_PLAN.md): Wireless and RF scan deployment strategies.
+*   [🧪 Firing Range Guide](FIRING_RANGE.md): Setup validation environments for intrusion testing.
+*   [📐 Security Model](SECURITY_MODEL.md): Subsystem isolation guidelines.
+*   [⚙️ Tactical Scanner Guide](TACTICAL_SCANNER_GUIDE.md): Stealth SYN and UDP scouting manuals.
+*   [🛰️ Local Execution Guide](LOCAL_EXECUTION_GUIDE.md): Local host assessment reference.
+*   [⚡ eBPF Compilation Guide](EBPF_COMPILATION_GUIDE.md): Linux Kernel eBPF/XDP compiler steps.
+
+---
+
 &copy; 2026. All Rights Reserved. This showcase documentation is open-source; the core implementation codebase is private and proprietary.

@@ -1,0 +1,6 @@
+gpg: Signature made Tue 09 Jun 2026 11:56:14 AM EDT
+gpg:                using EDDSA key 3A6FB6AB08EDA506D4BF7799D4FD74D8369D2FB0
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+gpg: Good signature from "Bastion Release Signing <release@bastion.local>" [ultimate]
