@@ -37,7 +37,7 @@ graph TD
     TcpScanner -->|packet inject| Strike[strike Crate]
     
     TcpScanner -->|banner/active grab| ReconSvc[recon::services::active_fingerprint]
-    ReconSvc -->|identifies| FingerprintCrate[fingerprint Crate (SST)]
+    ReconSvc -->|identifies| FingerprintCrate["fingerprint Crate (SST)"]
     
     UdpActive -->|matches payload| FingerprintCrate
 ```
