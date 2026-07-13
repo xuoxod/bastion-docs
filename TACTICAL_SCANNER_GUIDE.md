@@ -77,70 +77,70 @@ Every port input source (`ports`, `--with-defaults`, and `--os`) is cumulative; 
 #### 1. Basic Single Target & Custom Ports Scan
 Scan only a specified target and port list with default automated privilege check and active banner grabbing:
 ```bash
-./target/release/scan 192.168.1.1 22,80,443
+././bin/scan 192.168.1.1 22,80,443
 ```
 
 #### 2. Target & Custom Port Range Scan
 Scan a targeted target and sequential port ranges:
 ```bash
-./target/release/scan 192.168.1.1 8000-8080
+././bin/scan 192.168.1.1 8000-8080
 ```
 
 #### 3. Target & Default Ports Scan
 Scan only the system's default well-known ports (1–1024):
 ```bash
-./target/release/scan 192.168.1.1 --with-defaults
+././bin/scan 192.168.1.1 --with-defaults
 ```
 
 #### 4. Target, Custom Ports, & Default Ports Merged
 Scan custom ports merged with the default well-known ports:
 ```bash
-./target/release/scan 192.168.1.1 8080,9000 --with-defaults
+././bin/scan 192.168.1.1 8080,9000 --with-defaults
 ```
 
 #### 5. Target & Smart OS Port Profile Scan
 Scan ports optimized for a specific target operating system (e.g., Android):
 ```bash
-./target/release/scan 192.168.1.185 --os android
+././bin/scan 192.168.1.185 --os android
 ```
 
 #### 6. Target, Smart OS Profile, & Custom Ports Merged
 Scan OS-specific ports merged with custom user-provided ports:
 ```bash
-./target/release/scan 192.168.1.185 30778 --os android
+././bin/scan 192.168.1.185 30778 --os android
 ```
 
 #### 7. Target, Smart OS Profile, Custom Ports, & Default Ports Merged
 Merge all port inputs (defaults 1–1024, smart OS profile, and custom ports) into a single unified scan list:
 ```bash
-./target/release/scan 192.168.1.185 30778,50000 --os android --with-defaults
+././bin/scan 192.168.1.185 30778,50000 --os android --with-defaults
 ```
 
 #### 8. Pure Stealth Scan (Skip Banners)
 Skip the active banner grabbing phase entirely to execute a 100% quiet scan (SYN or Connect only):
 ```bash
-./target/release/scan 192.168.1.160 22,80,443 --stealth-only
+././bin/scan 192.168.1.160 22,80,443 --stealth-only
 ```
 *Note: `--stealth-only` can be combined with **any** port option configuration (examples 1 through 7).*
 
 #### 9. Forced TCP Connect Scan (No root privileges required)
 Forces standard user-space TCP Connect scanning:
 ```bash
-./target/release/scan 192.168.1.1 22,80,443 --method connect
+././bin/scan 192.168.1.1 22,80,443 --method connect
 ```
 *Note: `--method connect` can be combined with **any** port option configuration (examples 1 through 7) and `--stealth-only`.*
 
 #### 10. Forced Raw SYN Scan (Requires root privileges)
 Forces the raw SYN packet scan (will fail if not executed with `sudo`):
 ```bash
-sudo ./target/release/scan 192.168.1.1 22,80,443 --method syn
+sudo ././bin/scan 192.168.1.1 22,80,443 --method syn
 ```
 *Note: `--method syn` can be combined with **any** port option configuration (examples 1 through 7) and `--stealth-only`.*
 
 #### 11. Custom Port Scan with CSV Export
 Writes the scan output directly to a CSV report file:
 ```bash
-./target/release/scan 192.168.1.1 22,80,443 --write reports/scan_report.csv
+././bin/scan 192.168.1.1 22,80,443 --write reports/scan_report.csv
 ```
 *Note: `--write` can be combined with **any** scanning combination (examples 1 through 10).*
 
@@ -181,60 +181,60 @@ Below is the exhaustive matrix of all possible command-line combinations for the
 #### 1. Standard UDP Scan (Specific Custom Ports)
 Scan only custom ports using a default empty payload and standard timeouts:
 ```bash
-./target/release/udp 192.168.1.1 53,123,161
+././bin/udp 192.168.1.1 53,123,161
 ```
 
 #### 2. Standard UDP Scan (Default Ports Only)
 Scan only default surface ports (1–1024) with standard parameters:
 ```bash
-./target/release/udp 192.168.1.1 --with-defaults
+././bin/udp 192.168.1.1 --with-defaults
 ```
 
 #### 3. Standard UDP Scan (Custom & Default Ports Merged)
 Merge custom ports and well-known defaults:
 ```bash
-./target/release/udp 192.168.1.1 5060,16161 --with-defaults
+././bin/udp 192.168.1.1 5060,16161 --with-defaults
 ```
 
 #### 4. Custom Payload UDP Scan
 Scan specific ports and send a custom string payload instead of an empty probe:
 ```bash
-./target/release/udp 192.168.1.1 53,123 --payload "TEST_PAYLOAD"
+././bin/udp 192.168.1.1 53,123 --payload "TEST_PAYLOAD"
 ```
 *Note: `--payload` can be combined with custom/default ports merged (examples 1 through 3), but **cannot** be combined with `--scout` or `--protocols`.*
 
 #### 5. Timeout Adjusted UDP Scan
 Increase timeout to `1500ms` for high-latency/congested networks:
 ```bash
-./target/release/udp 192.168.1.1 53,123 --timeout-ms 1500
+././bin/udp 192.168.1.1 53,123 --timeout-ms 1500
 ```
 *Note: `--timeout-ms` can be combined with **any** other scan option.*
 
 #### 6. Concurrency Adjusted UDP Scan
 Throttle concurrency to 100 simultaneous probes to protect slower systems or routers:
 ```bash
-./target/release/udp 192.168.1.1 53,123 --limit 100
+././bin/udp 192.168.1.1 53,123 --limit 100
 ```
 *Note: `--limit` can be combined with **any** other scan option.*
 
 #### 7. Active Protocol Scouting (All 9 Protocols)
 Sweep custom target ports sending all registered UDP protocol payloads:
 ```bash
-./target/release/udp 192.168.1.1 53,123,161 --scout
+././bin/udp 192.168.1.1 53,123,161 --scout
 ```
 *Note: Active scouting sweeps can be combined with custom/default port configurations (examples 1 through 3), timeouts, and concurrency limit overrides.*
 
 #### 8. Specific Protocol Scouting (Subset of Protocols)
 Scout custom target ports, sending only specific protocol payloads (e.g., DNS and NTP):
 ```bash
-./target/release/udp 192.168.1.1 53,123 --protocols dns,ntp
+././bin/udp 192.168.1.1 53,123 --protocols dns,ntp
 ```
 *Note: The `--protocols` option automatically enables scouting. It can be combined with custom/default port configurations, timeouts, and concurrency limit overrides.*
 
 #### 9. Active Scouting with CSV Export
 Scout target ports and write the service mapping results directly to a report file:
 ```bash
-./target/release/udp 192.168.1.1 53,123 --scout --write reports/udp_scout.csv
+././bin/udp 192.168.1.1 53,123 --scout --write reports/udp_scout.csv
 ```
 *Note: `--write` can be combined with **any** scanning combination (examples 1 through 8).*
 
@@ -303,18 +303,18 @@ let is_complete = validator.register_knock(client_ip, knocked_port);
 
 ## 📦 Standalone Binary Compilation & Distribution
 
-To compile optimized, standalone binaries that can be distributed to systems that do not have `cargo` or the Rust toolchain installed:
+To compile optimized, standalone binaries that can be distributed to systems that do not have `the build environment` or the Rust toolchain installed:
 
 1. **Build optimized release binaries**:
    ```bash
-   cargo build --release
+   ./build.sh
    ```
 
 2. **Locate the binaries**:
-   The standalone binaries are generated under the `target/release/` directory:
-   * `target/release/scan`
-   * `target/release/udp`
-   * `target/release/discover`
+   The standalone binaries are generated under the `./bin/` directory:
+   * `./bin/scan`
+   * `./bin/udp`
+   * `./bin/discover`
 
 ---
 &copy; 2026. All Rights Reserved. This project is proprietary and closed-source.

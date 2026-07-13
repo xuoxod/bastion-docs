@@ -32,7 +32,7 @@ Bastion is specifically tailored for hardened production Linux environments. Thi
 *What to expect:* Musl-libc dependencies.
 
 - You must compile Bastion statically using `musl` if deploying directly onto the bare metal of an Alpine instance.
-- *Pro tip:* `cargo build --release --target x86_64-unknown-linux-musl` will produce an identical binary size without strictly missing the `glibc` library on start.
+- *Pro tip:* `./build.sh --target musl` will produce an identical binary size without strictly missing the `glibc` library on start.
 
 ---
 
@@ -43,7 +43,7 @@ When running the systemd installer (`scripts/systemd/install_service.sh`) or the
 ```text
 [INFO] Provisioning configuration directories natively in /etc/bastion
 [INFO] Checking for local compiled binaries...
-[SUCCESS] Copied target/release/bastion-daemon -> /usr/local/bin
+[SUCCESS] Copied ./bin/bastion-daemon -> /usr/local/bin
 [INFO] Installing the hardened Systemctl unit...
 [SUCCESS] Installed unit to /etc/systemd/system/bastion.service
 [INFO] Reloading systemd daemon to ingest exact capabilities...

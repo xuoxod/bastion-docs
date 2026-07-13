@@ -174,9 +174,9 @@ Acceptance checks:
 
 Suggested verification commands:
 
-1. `cargo test -p bastion-daemon`
-2. `cargo test -p cli`
-3. `cargo test -p recon --test host_profile_fixture_tests`
+1. `./test.sh --daemon`
+2. `./test.sh --cli`
+3. `./test.sh --recon`
 
 Exit gate:
 
@@ -208,9 +208,9 @@ Acceptance checks:
 
 Suggested verification commands:
 
-1. `cargo test -p cli`
-2. `cargo test -p recon`
-3. `cargo test --workspace`
+1. `./test.sh --cli`
+2. `./test.sh --recon`
+3. `./test.sh --all`
 
 Exit gate:
 
@@ -242,7 +242,7 @@ Acceptance checks:
 
 Suggested verification commands:
 
-1. `cargo test --workspace`
+1. `./test.sh --all`
 2. `scripts/daemon/policy_preset_smoke.sh --format human`
 3. `scripts/daemon/policy_preset_smoke.sh --format json`
 
@@ -271,7 +271,7 @@ Public beta can run safely in home/SMB labs with predictable outcomes.
 Bastion is public-beta ready only when all conditions are met:
 
 1. M1, M2, and M3 exit gates are all satisfied.
-2. `cargo test --workspace` passes on release candidate.
+2. `./test.sh --all` passes on release candidate.
 3. Smoke scripts pass on at least one representative home/SMB Linux environment.
 4. README and CLI help clearly state defensive-first intent and operational boundaries.
 5. Rollback steps are documented and tested at least once.

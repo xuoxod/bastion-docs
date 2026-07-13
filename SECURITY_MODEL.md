@@ -56,7 +56,7 @@ Bastion is a defensive-first network control plane with:
 ## Operator Verification Commands
 
 ```bash
-cargo test --workspace
+./test.sh --all
 shellcheck -x -e SC1091 -f gcc $(find scripts -type f -name '*.sh' | sort)
 bash scripts/tests/smoke_daemon_wrappers.sh
 ```

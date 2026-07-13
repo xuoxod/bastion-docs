@@ -49,7 +49,7 @@ Suggested commands:
 
 ```bash
 # Baseline fixture assertions
-cargo test -p recon --test host_profile_fixture_tests
+./test.sh --recon
 
 # Scripted drift reconciliation check
 ./scripts/recon/drift_reconciliation_check.sh
@@ -122,11 +122,11 @@ These checks are enforced in:
 Suggested pre-release command set:
 
 ```bash
-cargo test -p cli
-cargo test -p bastion-daemon
-cargo test -p recon --test host_profile_fixture_tests
+./test.sh --cli
+./test.sh --daemon
+./test.sh --recon
 ./scripts/recon/drift_reconciliation_check.sh
-cargo test --workspace
+./test.sh --all
 scripts/daemon/policy_preset_smoke.sh --format human
 scripts/daemon/policy_preset_smoke.sh --format json
 ```

@@ -36,7 +36,7 @@ This sign-off covers Bastion discovery JSON output consumed by RMEDIAtech upload
 
 1. RMEDIAtech upload handlers currently accept `.json` and `.jsonl`.
 2. CSV uploads are currently rejected by RMEDIAtech handlers and are not included in this sign-off.
-3. Local or CI environments running `cargo test -p utils --test rmediatech_contract_tests` need `libpcap` development headers available for linking.
+3. Local or CI environments running `./test.sh --contract` need `libpcap` development headers available for linking.
 
 ## Acceptance Status
 

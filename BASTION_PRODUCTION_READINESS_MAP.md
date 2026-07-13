@@ -92,7 +92,7 @@ Companion planning and handoff material:
 
 Ship readiness for Track 1 is accepted only when all gates pass:
 
-1. cargo test --workspace
+1. ./test.sh --all
 2. shellcheck -x -e SC1091 -f gcc $(find scripts -type f -name '*.sh' | sort)
 3. bash scripts/tests/smoke_daemon_wrappers.sh
 

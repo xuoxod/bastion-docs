@@ -25,9 +25,9 @@
 ## Validation Performed
 
 1. Local report validation:
-   - `cargo test -p utils net::report -- --nocapture`
+   - `./test.sh --report`
 2. Local contract validation:
-   - `cargo test -p utils --test rmediatech_contract_tests -- --nocapture`
+   - `./test.sh --contract`
 3. CI validation:
    - RMEDIAtech Contract workflow passed after native dependency installation fix.
 

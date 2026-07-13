@@ -277,58 +277,58 @@ Options:
 
 ### Exhaustive Command Combinations Matrix
 
-Execute these commands using the compiled binary file path `./target/release/ble_scan`:
+Execute these commands using the compiled binary file path `././bin/ble_scan`:
 
 * **Passive Scanning Only (Defaults)**:
   ```bash
-  sudo ./target/release/ble_scan
+  sudo ././bin/ble_scan
   ```
   *Description*: Passive scan listening silently on the first resolved physical adapter index (e.g., `adapter 0`).
 
 * **Active Scanning Only**:
   ```bash
-  sudo ./target/release/ble_scan --active
+  sudo ././bin/ble_scan --active
   # or
-  sudo ./target/release/ble_scan -a
+  sudo ././bin/ble_scan -a
   ```
   *Description*: Active scan issuing requests to fetch additional metadata (e.g., local name fields) in Scan Responses.
 
 * **Target Specific Adapter**:
   ```bash
-  sudo ./target/release/ble_scan --device 2
+  sudo ././bin/ble_scan --device 2
   # or
-  sudo ./target/release/ble_scan -d 2
+  sudo ././bin/ble_scan -d 2
   ```
   *Description*: Binds the raw socket directly to interface index 2 (`adapter 2`).
 
 * **Passive Scan + CSV Report**:
   ```bash
-  sudo ./target/release/ble_scan --csv /tmp/report.csv
+  sudo ././bin/ble_scan --csv /tmp/report.csv
   ```
   *Description*: Passive scan exporting resolved devices telemetry to a formatted CSV spreadsheet on application exit.
 
 * **Active Scan + JSON Report**:
   ```bash
-  sudo ./target/release/ble_scan -a --json /tmp/report.json
+  sudo ././bin/ble_scan -a --json /tmp/report.json
   ```
   *Description*: Active scan exporting complete state details to an atomic JSON record on application exit.
 
 * **Combined Command (Target Adapter + Active Scan + CSV & JSON Exports)**:
   ```bash
-  sudo ./target/release/ble_scan -d 1 -a --csv /tmp/out.csv --json /tmp/out.json
+  sudo ././bin/ble_scan -d 1 -a --csv /tmp/out.csv --json /tmp/out.json
   ```
   *Description*: Active scan on `adapter 1` yielding both JSON and CSV output files atomically upon exit.
 
 * **Safe Simulated Fallback**:
   ```bash
-  ./target/release/ble_scan
+  ././bin/ble_scan
   ```
   *Description*: Running without elevated privileges or on host environments without hardware automatically kicks off the scanner in safe simulation mode. Excellent for client feature exploration.
 
 ### Display Unit Tests (TDD)
 The display logic is fully validated via TDD unit tests built directly into the binary file. To run these tests:
 ```bash
-cargo test --bin ble_scan
+./test.sh --bin ble_scan
 ```
 These tests verify:
 1. **RSSI Sorting**: Discovered devices are sorted in descending order of signal strength.

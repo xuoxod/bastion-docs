@@ -8,7 +8,7 @@ Use this checklist for public-beta candidate packaging and verification.
 2. Run baseline validation gates:
 
 ```bash
-cargo test --workspace
+./test.sh --all
 shellcheck -x -e SC1091 -f gcc $(find scripts -type f -name '*.sh' | sort)
 bash scripts/tests/smoke_daemon_wrappers.sh
 ```
@@ -27,21 +27,21 @@ and signature artifacts in `docs/release_evidence/<tag>`.
 1. Build release artifacts:
 
 ```bash
-cargo build --release --workspace --exclude bastion-ebpf
+./build.sh --workspace --exclude bastion-ebpf
 ```
 
 1. Capture compiler and toolchain metadata:
 
 ```bash
 rustc --version
-cargo --version
+the build environment --version
 ```
 
 1. Record artifact list and hashes:
 
 ```bash
 find target/release -maxdepth 1 -type f -executable -print | sort
-sha256sum target/release/* | sort
+sha256sum ./bin/* | sort
 ```
 
 1. Sign checksums and capture signature verification output:
@@ -91,7 +91,7 @@ Preferred privileged capture helper:
 ```
 
 The helper intentionally prebuilds as the current user and runs installer with
-`BASTION_SKIP_BUILD=1`, avoiding `sudo cargo` path issues on restricted shells.
+`BASTION_SKIP_BUILD=1`, avoiding `sudo the build environment` path issues on restricted shells.
 
 Use this transcript template per distro run:
 
@@ -99,11 +99,11 @@ Use this transcript template per distro run:
 Release Tag: vX.Y.Z-rcN
 Distro: <ubuntu-24.04|debian-12|almalinux-9|alpine-3.20>
 Kernel: <uname -r>
-Install Path: <systemd script|manual cargo|package>
+Install Path: <systemd script|manual the build environment|package>
 
 Build Metadata:
 - rustc: <version>
-- cargo: <version>
+- the build environment: <version>
 
 Validation Steps:
 - [ ] install completed

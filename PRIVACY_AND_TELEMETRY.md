@@ -41,7 +41,7 @@ Typical local locations include:
 ## Verification Commands
 
 ```bash
-cargo test --workspace
+./test.sh --all
 bash scripts/tests/smoke_daemon_wrappers.sh
 ```
 

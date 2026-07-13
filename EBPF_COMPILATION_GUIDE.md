@@ -22,7 +22,7 @@ rustup toolchain install nightly --component rust-src
 Use the explicit nightly flag (`+nightly`) and instruct the build system to build the `core` library natively (`-Z build-std=core`):
 
 ```bash
-cargo +nightly build -p bastion-ebpf --release --target bpfel-unknown-none -Z build-std=core
+the build environment +nightly build -p bastion-ebpf --release --target bpfel-unknown-none -Z build-std=core
 ```
 
 ## 🛡️ Known Artifacts & Edge Cases

@@ -12,7 +12,7 @@ sequenceDiagram
     participant Daemon as Master Daemon (Root)
     participant eBPF as Kernel XDP Map
 
-    Admin->>CLI: cargo run -p cli -- block --ip 1.2.3.4
+    Admin->>CLI: ./cli block --ip 1.2.3.4
     CLI->>Skt: Serialize(BlockIpv4: 1.2.3.4)
     Skt->>Daemon: Stream Payload
     Daemon->>eBPF: BpfMap::insert(1.2.3.4)
@@ -26,7 +26,7 @@ To save operators and developers time during rapid iterations or testing, we hav
 
 ### 1. Booting the Master Daemon
 
-The `daemon` attaches strictly to the Linux kernel via deep ring-0 hooks. This requires `cargo` to run under the `root` user dynamically. We've built an auto-configuring shell script that catches invalid privilege executions perfectly.
+The `daemon` attaches strictly to the Linux kernel via deep ring-0 hooks. This requires `the build environment` to run under the `root` user dynamically. We've built an auto-configuring shell script that catches invalid privilege executions perfectly.
 
 *Open a primary terminal and run:*
 
@@ -68,8 +68,8 @@ The CLI does **not** need root permissions whatsoever. Use the daemon CLI wrappe
 
 The wrapper layer now runs startup preflight checks before execution to reduce ambiguous runtime failures.
 
-- `scripts/daemon/start_core_daemon.sh` runs daemon-mode preflight (workspace, cargo, root).
-- `scripts/daemon/cli.sh` runs cli-mode preflight (workspace, cargo, cli crate availability).
+- `scripts/daemon/start_core_daemon.sh` runs daemon-mode preflight (workspace, the build environment, root).
+- `scripts/daemon/cli.sh` runs cli-mode preflight (workspace, the build environment, cli crate availability).
 - `scripts/daemon/policy_preset_smoke.sh` runs policy-smoke preflight and warns if daemon socket is missing.
 
 You can invoke preflight directly:
@@ -82,19 +82,19 @@ You can invoke preflight directly:
 
 ## 🛠 Manual Bare-Metal Execution
 
-If you wish to bypass the isolated `./scripts/` directories entirely and work directly with `cargo` for deep, raw testing:
+If you wish to bypass the isolated `./scripts/` directories entirely and work directly with `the build environment` for deep, raw testing:
 
 1. **Fire the Daemon:**
 
    ```bash
-   sudo cargo run -p bastion-daemon
+   sudo ./daemon
    ```
 
 2. **Execute Mitigations natively:**
 
    ```bash
-   cargo run -p cli -- block --ip 192.168.1.50
-   cargo run -p cli -- unblock --ip 192.168.1.50
+   ./cli block --ip 192.168.1.50
+   ./cli unblock --ip 192.168.1.50
    ```
 
 ### IPC Socket Details
@@ -110,19 +110,19 @@ The daemon and CLI default to `/tmp/bastion_master.sock`.
 If you are developing Bastion inside a multi-root workspace (e.g., alongside `netscan`, `rmediatech`, etc.) and using the IDE's built-in "Run" button or Tasks interface, you might see confusing terminal prefixes such as:
 
 ```text
-Executing task in folder netscan: cargo run --package utils --bin oui_lookup
+Executing task in folder netscan: the build environment run --package utils --bin oui_lookup
 ```
 
 **This is merely a cosmetic artifact of the VS Code task runner.** Because multiple projects are open, VS Code sometimes labels the execution terminal with the name of the first registered workspace folder.
 
 **The Verification & The Fix:**
-If you look closely at the cargo output (`Compiling utils v0.1.0 (/path/to/bastion/utils)`), it is correctly compiling and running Bastion's core, entirely decoupled from the legacy netscan project.
+If you look closely at the the build environment output (`Compiling utils v0.1.0 (/path/to/bastion/utils)`), it is correctly compiling and running Bastion's core, entirely decoupled from the legacy netscan project.
 
 To avoid this visual confusion—and to properly pass required arguments (such as MAC addresses) to binaries that will otherwise fail with a `Usage:` error—always run sub-project binaries explicitly from your terminal:
 
 ```bash
-cargo run -p utils --bin oui_lookup -- AA:BB:CC:DD:EE:FF
-cargo run -p recon --bin os_detect -- 192.168.1.100
+./utils oui_lookup AA:BB:CC:DD:EE:FF
+./recon os_detect 192.168.1.100
 ```
 
 ### 3. Persistent Systemd Background Operation
@@ -138,7 +138,7 @@ sudo ./scripts/systemd/install_service.sh
 If your sudo environment does not inherit Rust toolchain paths, use prebuild mode:
 
 ```bash
-cargo build --release -p bastion-daemon -p cli
+./build.sh
 sudo BASTION_SKIP_BUILD=1 ./scripts/systemd/install_service.sh
 ```
 
@@ -178,7 +178,7 @@ Before shipping or tagging a release candidate, run:
 
 ```bash
 # 1) Full workspace correctness
-cargo test --workspace
+./test.sh --all
 
 # 2) Actionable shell lint gate
 shellcheck -x -e SC1091 -f gcc $(find scripts -type f -name '*.sh' | sort)
@@ -217,10 +217,10 @@ shellcheck -x -e SC1091 -f gcc $(find scripts -type f -name '*.sh' | sort)
 bash scripts/tests/smoke_daemon_wrappers.sh
 
 # 2) Validate full software correctness without live hardware assumptions
-cargo test --workspace
+./test.sh --all
 
 # 3) Optionally validate hardware-conditional paths when lab gear is available
-cargo test -p utils --features experimental-fuzz
+./test.sh --fuzz
 ```
 
 This sequence is the default release-safe fallback when dedicated RF lab hardware is unavailable.
@@ -234,7 +234,7 @@ It is ignored by default and only runs when explicitly armed:
 BASTION_UTILS_ENABLE_LIVE=1 \
 BASTION_UTILS_LIVE_TCP_TARGETS=192.168.1.10,192.168.1.11 \
 BASTION_UTILS_LIVE_TCP_PORTS=22,80,443 \
-cargo test -p utils live_tcp_scanner_smoke_explicit_targets -- --ignored --nocapture
+./test.sh --live-explicit
 ```
 
 Use the single-target variant only when you want to validate one host at a time:
@@ -243,7 +243,7 @@ Use the single-target variant only when you want to validate one host at a time:
 BASTION_UTILS_ENABLE_LIVE=1 \
 BASTION_UTILS_LIVE_TCP_SINGLE_TARGET=192.168.1.10 \
 BASTION_UTILS_LIVE_TCP_SINGLE_PORTS=22,80,443 \
-cargo test -p utils live_tcp_scanner_smoke_single_target -- --ignored --nocapture
+./test.sh --live-single
 ```
 
 Both tests are intentionally ignored by default so CI remains deterministic.
@@ -256,7 +256,7 @@ The following checks were validated during a live Tier-1 smoke test with physica
 - ✅ operator exit completed cleanly
 - ✅ `iw dev` after exit showed both USB adapters back in `managed` mode
 - ✅ `ip -brief link` confirmed interfaces remained sane post-exit
-- ✅ `cargo test -p strike_lab` remained green after hardware run
+- ✅ `./test.sh --strike-lab` remained green after hardware run
 
 ```mermaid
 sequenceDiagram
@@ -271,7 +271,7 @@ sequenceDiagram
    Op->>Lab: quit via q
    Lab->>OS: restore interface mode
    OS-->>Op: adapters managed and present
-   Op->>T: cargo test -p strike_lab
+   Op->>T: ./test.sh --strike-lab
    T-->>Op: pass
 ```
 

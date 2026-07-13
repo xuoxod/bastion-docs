@@ -40,7 +40,7 @@ For standalone edge-routers or Linode instances, Bastion is designed to be a per
 Never run debug builds in production. Compile specifically for release tuning.
 
 ```bash
-cargo build --release --manifest-path ./daemon/Cargo.toml
+./build.sh --manifest-path ./daemon/Cargo.toml
 ```
 
 **2. Execute the Hardened Installer:**
@@ -145,9 +145,9 @@ If you chose the daemon route, the supported runtime control path is CLI -> UDS 
 ### Typical command flow
 
 ```bash
-cargo run -p cli -- block --ip 198.51.100.14
-cargo run -p cli -- status
-cargo run -p cli -- unblock --ip 198.51.100.14
+./cli block --ip 198.51.100.14
+./cli status
+./cli unblock --ip 198.51.100.14
 ```
 
 ```mermaid

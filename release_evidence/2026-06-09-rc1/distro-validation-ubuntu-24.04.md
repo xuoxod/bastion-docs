@@ -3,12 +3,12 @@
 Release Tag: 2026-06-09-rc1
 Distro: ubuntu-24.04
 Kernel: 6.17.0-35-generic
-Install Path: local cargo release build via scripts/release/generate_release_evidence.sh
+Install Path: local the build environment release build via scripts/release/generate_release_evidence.sh
 
 ## Build Metadata
 
 - rustc: rustc 1.90.0 (1159e78c4 2025-09-14)
-- cargo: cargo 1.90.0 (840b83a10 2025-07-30)
+- the build environment: the build environment 1.90.0 (840b83a10 2025-07-30)
 - artifact manifest: docs/release_evidence/2026-06-09-rc1/release-artifacts.txt
 - checksums: docs/release_evidence/2026-06-09-rc1/SHA256SUMS
 - detached signature: docs/release_evidence/2026-06-09-rc1/SHA256SUMS.asc
@@ -17,10 +17,10 @@ Install Path: local cargo release build via scripts/release/generate_release_evi
 
 ## Validation Steps
 
-- [x] release build completed (`cargo build --release --workspace --exclude bastion-ebpf`)
+- [x] release build completed (`./build.sh --workspace --exclude bastion-ebpf`)
 - [x] checksum manifest generated
 - [x] detached signature generated and verified
-- [x] baseline software gate (`cargo test --workspace`) passed earlier in session
+- [x] baseline software gate (`./test.sh --all`) passed earlier in session
 - [x] shell gate (`shellcheck` + wrapper smoke harness) passed earlier in session
 - [ ] systemd install/uninstall rollback run (blocked in this session: sudo requires interactive password)
 - [ ] root daemon live runtime validation (blocked in this session: sudo requires interactive password)

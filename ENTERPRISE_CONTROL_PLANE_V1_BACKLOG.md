@@ -107,11 +107,11 @@ Definition of done:
 
 ## Initial Test Command Set
 
-1. cargo test -p daemon ipc_schema_contract_tests -- --nocapture
-2. cargo test -p core rule_state_atomic_reload_tests -- --nocapture
-3. cargo test -p daemon health_snapshot_contract_tests -- --nocapture
-4. cargo test -p daemon worker_crash_recovery_tests -- --nocapture
-5. cargo test -p utils netscan_parity_fixture_tests -- --nocapture
+1. ./test.sh --ipc
+2. ./test.sh --core
+3. ./test.sh --health
+4. ./test.sh --worker
+5. ./test.sh -p utils netscan_parity_fixture_tests -- --nocapture
 
 ## Release Gate for Enterprise Control Plane v1
 
@@ -204,7 +204,7 @@ M4-T5 completed and locally validated.
 1. Added fixture-backed parity test suite: `utils/tests/netscan_parity_fixture_tests.rs`.
 2. Added snapshot fixture for discovery CSV overlap fields: `utils/tests/fixtures/netscan/discovery_csv_expected.csv`.
 3. Validated side-by-side parity for overlapping JSON envelope/device fields against RMEDIAtech fixtures.
-4. New parity test suite passes locally (`cargo test -p utils --test netscan_parity_fixture_tests -- --nocapture`).
+4. New parity test suite passes locally (`./test.sh --parity`).
 
 ### M4-T3 Completion Evidence
 
@@ -218,7 +218,7 @@ M4-T5 completed and locally validated.
 1. Added doc consistency contract test suite: `utils/tests/replacement_gate_doc_consistency_tests.rs`.
 2. Validated parity matrix required sections and cutover gate markers are present.
 3. Validated backlog references for M4 artifacts remain anchored.
-4. New doc consistency suite passes locally (`cargo test -p utils --test replacement_gate_doc_consistency_tests -- --nocapture`).
+4. New doc consistency suite passes locally (`./test.sh --consistency`).
 
 ### M4-T5 Completion Evidence
 

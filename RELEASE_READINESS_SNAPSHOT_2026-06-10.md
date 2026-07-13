@@ -9,9 +9,9 @@
 
 ## Gate Summary
 
-1. Workspace tests: pass (`cargo test --workspace -- --nocapture`)
-2. Netscan parity fixture suite: pass (`cargo test -p utils --test netscan_parity_fixture_tests -- --nocapture`)
-3. Replacement gate doc consistency suite: pass (`cargo test -p utils --test replacement_gate_doc_consistency_tests -- --nocapture`)
+1. Workspace tests: pass (`./test.sh --all`)
+2. Netscan parity fixture suite: pass (`./test.sh --parity`)
+3. Replacement gate doc consistency suite: pass (`./test.sh --consistency`)
 4. Daemon wrapper smoke harness: pass (`bash scripts/tests/smoke_daemon_wrappers.sh`)
 
 ## Milestone Closure Summary

@@ -12,7 +12,7 @@ This candidate confirms:
 
 ## Validation Highlights
 
-- Workspace tests passed (`cargo test --workspace`)
+- Workspace tests passed (`./test.sh --all`)
 - Script lint gate passed (`shellcheck -x -e SC1091 ...`)
 - Wrapper smoke harness passed (`bash scripts/tests/smoke_daemon_wrappers.sh`)
 - Privileged transcript passed end-to-end:
